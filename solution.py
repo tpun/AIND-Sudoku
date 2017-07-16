@@ -29,6 +29,7 @@ def naked_twins(values):
 
 rows = 'ABCDEFGHI'
 cols = '123456789'
+possible_values = '123456789'
 
 def cross(A, B):
     "Cross product of elements in A and elements in B."
@@ -68,8 +69,7 @@ def display(values):
     pass
 
 def solved(value):
-    possible_digits = '123456789'
-    return len(value)==1 and value in possible_digits
+    return len(value)==1 and value in possible_values
 
 def eliminate_from_peers(box, to_remove, grid):
     for peer in peers[box]:
