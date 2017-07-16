@@ -82,7 +82,12 @@ def eliminate(values):
     return values
 
 def only_choice(values):
-    pass
+    for unit in unitlist:
+        for value in possible_values:
+            matched_boxes = [box for box in unit if value in values[box]]
+            if len(matched_boxes) == 1:
+                values[matched_boxes[0]] = value
+    return values
 
 def reduce_puzzle(values):
     pass
