@@ -67,8 +67,19 @@ def display(values):
     """
     pass
 
+def solved(value):
+    possible_digits = '123456789'
+    return len(value)==1 and value in possible_digits
+
+def eliminate_from_peers(box, to_remove, grid):
+    for peer in peers[box]:
+        grid[peer] = grid[peer].replace(to_remove, '')
+
 def eliminate(values):
-    pass
+    solved_boxes = dict((box, value) for box, value in values.items() if solved(value))
+    for box, to_remove in solved_boxes.items():
+        eliminate_from_peers(box, to_remove, values)
+    return values
 
 def only_choice(values):
     pass
