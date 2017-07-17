@@ -110,8 +110,33 @@ def reduce_puzzle(values):
             return False
     return values
 
+def solved_puzzle(values):
+    return all(len(values[s]) == 1 for s in boxes)
+
+def solved_box(box_value):
+    return len(box_value) == 1
+
 def search(values):
-    pass
+    "Using depth-first search and propagation, try all possible values."
+    # First, reduce the puzzle using the previous function
+    values = reduce_puzzle(values)
+    if values is False: # special condition for failign to solve puzzle
+        return False
+
+    if solved_puzzle(values):
+        return values
+
+    # Choose one of the unfilled squares with the fewest possibilities
+    unsolved_boxes = [box for box in boxes if not solved_box(values[box])]
+    unsolved_boxes = sorted(unsolved_boxes, key=lambda b: len(values[b]))
+    first_unsolved_box = unsolved_boxes[0]
+    branches = values[first_unsolved_box]
+    for value in branches:
+        branched_puzzle = values.copy()
+        branched_puzzle[first_unsolved_box] = value
+        result = search(branched_puzzle)
+        if result:
+            return result
 
 def solve(grid):
     """
