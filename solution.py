@@ -1,32 +1,5 @@
 assignments = []
 
-def assign_value(values, box, value):
-    """
-    Please use this function to update your values dictionary!
-    Assigns a value to a given box. If it updates the board record it.
-    """
-
-    # Don't waste memory appending actions that don't actually change any values
-    if values[box] == value:
-        return values
-
-    values[box] = value
-    if len(value) == 1:
-        assignments.append(values.copy())
-    return values
-
-def naked_twins(values):
-    """Eliminate values using the naked twins strategy.
-    Args:
-        values(dict): a dictionary of the form {'box_name': '123456789', ...}
-
-    Returns:
-        the values dictionary with the naked twins eliminated from peers.
-    """
-
-    # Find all instances of naked twins
-    # Eliminate the naked twins as possibilities for their peers
-
 rows = 'ABCDEFGHI'
 cols = '123456789'
 possible_values = '123456789'
@@ -43,6 +16,53 @@ square_units = [cross(rs, cs) for rs in ('ABC','DEF','GHI') for cs in ('123','45
 unitlist = row_units + column_units + square_units
 units = dict((s, [u for u in unitlist if s in u]) for s in boxes)
 peers = dict((s, set(sum(units[s],[]))-set([s])) for s in boxes)
+
+def assign_value(values, box, value):
+    """
+    Please use this function to update your values dictionary!
+    Assigns a value to a given box. If it updates the board record it.
+    """
+
+    # Don't waste memory appending actions that don't actually change any values
+    if values[box] == value:
+        return values
+
+    values[box] = value
+    if len(value) == 1:
+        assignments.append(values.copy())
+    return values
+
+def print_boxes(boxes, values):
+    printed = []
+    for box in boxes:
+        printed.append(box+':'+values[box])
+    print(printed)
+
+def naked_twins(values):
+    """Eliminate values using the naked twins strategy.
+    Args:
+        values(dict): a dictionary of the form {'box_name': '123456789', ...}
+
+    Returns:
+        the values dictionary with the naked twins eliminated from peers.
+    """
+
+    for unit in unitlist:
+        for abox in unit:
+            if len(values[abox]) != 2:
+                continue
+            matched_boxes = [bbox for bbox in unit if values[abox]==values[bbox]]
+
+            if len(matched_boxes) == 2:
+                to_remove_boxes = [box for box in unit if box not in matched_boxes]
+                for box in to_remove_boxes:
+                    for to_remove in values[abox]:
+                        values[box] = values[box].replace(to_remove, '')
+                # Since Naked Twins only come in two in a unit, we could break
+                # once we have processed the first time.
+                break
+
+    return values
 
 def grid_values(grid):
     """
