@@ -115,6 +115,9 @@ def reduce_puzzle(values):
         # Your code here: Use the Eliminate Strategy
         values = eliminate(values)
 
+        # Use the naked twins strategy
+        values = naked_twins(values)
+
         # Your code here: Use the Only Choice Strategy
         values = only_choice(values)
 
