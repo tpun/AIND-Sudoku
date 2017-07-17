@@ -128,7 +128,7 @@ def reduce_puzzle(values):
     return values
 
 def solved_puzzle(values):
-    return all(len(values[s]) == 1 for s in boxes)
+    return all(solved(values[s]) for s in boxes)
 
 def solved_box(box_value):
     return len(box_value) == 1
