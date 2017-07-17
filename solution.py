@@ -48,20 +48,16 @@ def naked_twins(values):
     """
 
     for unit in unitlist:
-        for abox in unit:
-            if len(values[abox]) != 2:
-                continue
-            matched_boxes = [bbox for bbox in unit if values[abox]==values[bbox]]
+        # Find all instances of naked twins
+        len2 = [values[box] for box in unit if len(values[box])==2]
+        twins = [value for value in len2 if len2.count(value)==2]
+        non_twin_boxes = [box for box in unit if values[box] not in twins]
 
-            if len(matched_boxes) == 2:
-                to_remove_boxes = [box for box in unit if box not in matched_boxes]
-                for box in to_remove_boxes:
-                    for to_remove in values[abox]:
-                        values[box] = values[box].replace(to_remove, '')
-                # Since Naked Twins only come in two in a unit, we could break
-                # once we have processed the first time.
-                break
-
+        # Eliminate the naked twins as possibilities for their peers
+        for twin in twins:
+            for box in non_twin_boxes:
+                values[box] = values[box].replace(twin[0], '')
+                values[box] = values[box].replace(twin[1], '')
     return values
 
 def grid_values(grid):
